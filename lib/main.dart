@@ -100,11 +100,14 @@ class _MyHomePageState extends State<MyHomePage> {
                width: double.infinity,
                child: ListView.builder(
                    scrollDirection: Axis.horizontal,
-                   itemCount: _stack._list.length ?? 0,
+                   itemCount: _stack.length ?? 0,
                    itemBuilder: (context,index){
-                     int value = _stack._list[index];
-                     String arrayValue = index == 0 ? "[ ${value.toString()}," : index == _stack._list.length - 1 ?  "${value.toString()} ]" : "${value.toString()} ,";
-                  return Text(arrayValue);
+                     int value = _stack.getStack[index];
+                     String arrayValue =  " ${value.toString()} ,";
+                  return Text(arrayValue,style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold
+                  ),);
                }),
              ),
            ),
@@ -126,6 +129,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: (){
                       setState(() {
                         _stack.pop();
+                        if(_stack.isEmpty){
+                          i = 0;
+                        }
+
                       });
                     })
               ],
@@ -144,13 +151,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 class Stack<T> {
-  List<T> _list = <T>[];
+  final List<T> _list = <T>[];
+
+
   void push(T value) => _list.add(value);
   T? pop() => isNotEmpty ? _list.removeLast() : null;
   T? get peek => isNotEmpty ? _list.last : null;
 
   bool get isEmpty => _list.isEmpty;
   bool get isNotEmpty => _list.isNotEmpty;
+
+  List<T> get getStack => _list;
+
+  int get length => _list.length;
 
   @override
   String toString() =>  _list.toString();
